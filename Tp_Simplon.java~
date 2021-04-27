@@ -1,0 +1,116 @@
+public class Tp_Simplon{
+  /*
+  La classe Terminal, regroupe les principales méthodes de saisie et d’affichage
+  au terminal pour les types predéfinis : int, double, boolean,
+  char et String. Le fichier source Terminal.java, doit se trouver présent dans le même répertoire que le tp.
+   * 
+   */
+  
+  // Fonction qui demande au User de saisir rangée, siège et nombre de place.
+  public static void remplirPlaceCinema ( boolean [][] placeCinema) {    
+    int numRangee, numSiege, nombrePlace ;    
+    String temp ;  
+    do{
+    do{
+      System.out.println ( "saisissez le n° de la rangée où vous souhaitez réserver ! " );    
+      System.out.println ( "Attention! le numéro que vous devez saisir doit être compris entre 1 - 8." );    
+      numRangee = Terminal.lireInt (); 
+    } while (numRangee <= 0 || numRangee >= 9);
+    do{
+      System.out.println ( "Selectionnez le siège où vous souhaitez réserver ! " );    
+      System.out.println ( "Attention! le numéro que vous devez saisir doit être compris entre 1 - 9." );    
+      numSiege = Terminal.lireInt (); 
+    } while (numSiege <= 0 || numSiege >= 10);
+    do{
+      System.out.println ( "Choissisez le nombre de place que vous souhaitez réserver ! " );    
+      System.out.println ( "Attention! le nombre doit se faire selon la disponibilité de la rangée." );    
+      nombrePlace = Terminal.lireInt (); 
+    } while (nombrePlace <= 0 || nombrePlace > 10);    
+    if (siegeDispo(placeCinema, numRangee, numSiege)  || 
+        nombreSiegeDispo(placeCinema, numRangee, numSiege, nombrePlace)){
+      if (nombrePlace ==1){
+        placeCinema[numRangee -1][numSiege -1] = true;
+      } else{
+        placeCinema = remplirSieges(placeCinema, numRangee, numSiege, nombrePlace);
+      }
+    } 
+    afficherPlace(placeCinema);
+    System.out.println ( "Tapez sur la touche entrer si vous ne souhaitez plus réserver ! " );  
+    System.out.println ( "Pour continuer à réserver, il vous suffit de taper sur n'importe quelle lettre, puis sur entrée! " );  
+    temp = Terminal.lireString(); 
+    }while (!temp.equals(""));
+    }
+  
+  // Fonction qui indique si un siège est dispo ou pas.
+  public static boolean siegeDispo(boolean[][] tab, int numRangee, int numSiege){
+    if(!tab[numRangee-1][numSiege-1]){
+    return true;
+    }      
+    return false;
+  }
+  
+  // Cette fonction modifie le statut non-réservé à réservé lorsqu'on choisi plusieurs sièges.
+  public static boolean[][] remplirSieges(boolean[][] tab, int numRangee, int numSiege, int nombreSiege){
+     int numbreSiegeLineDispo = 0; 
+     int numbreDecremente = 0;
+    for (int i = 0 ; i < tab[numRangee-1].length ; i++) {  
+        if ( !tab [numRangee-1] [i]){
+          numbreSiegeLineDispo +=1;
+        } 
+    }
+  //  if(numbreSiegeLineDispo <= nombreSiege){
+    for(int i =0; i < tab[numRangee-1].length && nombreSiege >= 1; i++){
+      if (!tab[numRangee-1][i]){
+        tab[numRangee-1][i] = true;
+        nombreSiege--;
+      }
+    }
+    return tab;
+  //  }
+  }
+  
+  // Fonction qui indique que la saisie d'user pour le nombre de sièges peut être effectué, car il y'a assez de siège
+  // sur la rangée
+  public static boolean nombreSiegeDispo(boolean[][] tab, int numRangee, int numSiege, int nombreSiege){
+    int numbreSiegeLineDispo = 0; 
+    for (int i = 0 ; i < tab.length ; i++) {  
+      for(int j = 0; j < tab[i].length; j ++){   
+        if ( !tab [i] [j]){
+          numbreSiegeLineDispo +=1;
+        } 
+      }
+    } 
+    if (numbreSiegeLineDispo > 0 && numbreSiegeLineDispo >= nombreSiege){
+      return true;     
+    }
+    else {
+      return false;
+    }
+  }
+  
+  // simple fonction qui affiche le tableau
+   public static void afficherPlace ( boolean [][] placeCinema ) {
+    System.out.print ( "Les places du cinéma sont les suivantes ! ") ;      
+    System.out.println () ;
+    System.out.println () ;    
+    for (int i = 0 ; i < placeCinema.length ; i++) {
+      System.out.print ("La rangée ");  
+      System.out.print (i + 1 + " "); 
+      for(int j = 0; j < placeCinema[i].length; j ++){   
+        if ( placeCinema [i] [j]){
+      System.out.print ( "[ Réservé ]");  
+        } else {
+          System.out.print ( "[ Non-réservé ]");  
+        }
+      }
+      System.out.println () ;
+    }    
+    System.out.println () ;         
+  }
+   
+  public static void main ( String [] args ) {    
+    boolean [][] tableauPlaceCinema = new boolean [8] [9] ;  
+    afficherPlace(tableauPlaceCinema);
+    remplirPlaceCinema(tableauPlaceCinema);
+  }  
+}
