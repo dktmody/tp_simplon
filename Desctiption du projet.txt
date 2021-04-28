@@ -1,0 +1,6 @@
+ 
+Bonjour,
+La classe Terminal, regroupe les principales méthodes de saisie et d’affichage
+   au terminal pour les types predéfinis : int, double, boolean,
+   char et String. Le fichier source Terminal.java, doit se trouver présent dans le même répertoire que le tp.
+
